@@ -1,0 +1,8 @@
+- name: enable the Elastic repo
+  shell: helm repo add elastic https://helm.elastic.co
+
+- name: put values
+  template: src=values.yml dest=/tmp/filebeat-{{ filebeat_helm_release }}.yml
+
+- name: upgrade {{ filebeat_helm_release }} release using a Helm chart
+  shell: helm upgrade {{ filebeat_helm_release }} elastic/filebeat --install --namespace {{ k8s_namespace }} -f /tmp/filebeat-{{ filebeat_helm_release }}.yml
